@@ -106,6 +106,7 @@ uint16_t Adafruit_TLC5947::getPWM(uint16_t chan) {
   } else {
     return pwmbuffer[chan];
   }
+}
 
 /*!
  *    @brief  Set LED
