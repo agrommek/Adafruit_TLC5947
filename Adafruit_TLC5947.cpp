@@ -77,6 +77,29 @@ void Adafruit_TLC5947::write() {
 }
 
 /*!
+ *    @brief  Writes PWM data to the all connected TLC5947 boards
+ */
+void Adafruit_TLC5947::write_fast() {
+  digitalLow(_lat);
+  // 24 channels per TLC5974
+  for (int16_t c = 24 * numdrivers - 1; c >= 0; c--) {
+    // 12 bits per channel, send MSB first
+    for (int8_t b = 11; b >= 0; b--) {
+      digitalLow(_clk);
+
+      if (pwmbuffer[c] & (1 << b))
+        digitalHigh(_dat);
+      else
+        digitalLow(_dat);
+      digitalHigh(_clk);
+    }
+  }
+  digitalLow(_clk);
+  digitalHigh(_lat);
+  digitalLow(_lat);
+}
+
+/*!
  *    @brief  Set the PWM channel / value
  *    @param  chan
  *            channel number ([0 - 23] on each board, so channel 2 for second
